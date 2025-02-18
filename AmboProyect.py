@@ -188,6 +188,7 @@ def actualizar_lista_productos():
 
 # Función para limpiar campos de productos
 def limpiar_campos():
+    entry_id_producto.delete(0, 'end')
     entry_nombre.delete(0, 'end')
     entry_descripcion.delete(0, 'end')
     entry_stock.delete(0, 'end')
