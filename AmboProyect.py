@@ -158,11 +158,11 @@ def actualizar_lista_productos():
 
     conn = conectar_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT id_producto, nombre, descripcion, stock FROM Productos')
+    cursor.execute('SELECT id_producto, nombre, descripcion, precio, stock FROM Productos')
     productos = cursor.fetchall()
     conn.close()
 
-    valores = [f"{p[0]} - {p[1]} - {p[2]} - (Stock: {p[3]})" for p in productos]
+    valores = [f"{p[0]} - {p[1]} - {p[2]} - ${p[3]} - (Stock: {p[4]})" for p in productos]
 
     # Actualizar Combobox de Ventas
     combo_productos_ventas['values'] = valores

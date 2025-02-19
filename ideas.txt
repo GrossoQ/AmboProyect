@@ -1,0 +1,16 @@
+1. registrar producto *
+2. registrar compra * (Agregar proveedor)
+3. registrar venta * (Agregar cliente)
+4. mostrar compra *
+5. mostrar venta *
+6. borrar producto
+7. borrar compra
+8. borrar venta
+9. extraer stock/precios
+10. actualizar nombre
+11. actualizar descripcion
+12. actualizar stock
+13. actualizar precio
+14. extraer ventas/mes
+15. extraer compras/mes
+16. agregar precio a barra de productos en ventas/compras
