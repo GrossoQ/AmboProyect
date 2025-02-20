@@ -14,3 +14,4 @@
 14. extraer ventas/mes
 15. extraer compras/mes
 16. agregar precio a barra de productos en ventas/compras
+17. estado de Venta, Pedido, Pagado, Entregado.
