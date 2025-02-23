@@ -321,6 +321,41 @@ def mostrar_compras_por_producto():
     else:
         messagebox.showwarning("Advertencia", "Selecciona un producto.")
         
+def borrar_producto():
+    # Obtener el ID del producto desde el campo de entrada
+    id_producto = entry_id_producto.get()
+    if id_producto:
+        try:
+            id_producto = int(id_producto)  # Convertir a entero
+            # Preguntar al usuario si está seguro de eliminar el producto
+            yesno = messagebox.askyesno("Eliminar producto", f"¿Desea eliminar el producto ID: {id_producto}?")
+            if yesno:  # Si el usuario hace clic en "Sí"
+                conn = conectar_db()
+                cursor = conn.cursor()
+                # Verificar si el producto existe
+                cursor.execute('''SELECT id_producto FROM Productos WHERE id_producto = ?''', (id_producto,))
+                producto = cursor.fetchone()
+                if producto:
+                    # Eliminar las ventas asociadas al producto
+                    cursor.execute('''DELETE FROM Ventas WHERE id_producto = ?''', (id_producto,))
+                    # Eliminar las compras asociadas al producto
+                    cursor.execute('''DELETE FROM Compras WHERE id_producto = ?''', (id_producto,))
+                    # Eliminar el producto
+                    cursor.execute('''DELETE FROM Productos WHERE id_producto = ?''', (id_producto,))
+                    conn.commit()
+                    conn.close()
+                    messagebox.showinfo("Éxito", "Producto y su historial eliminados correctamente.")
+                    limpiar_campos()
+                    actualizar_lista_productos()  # Actualizar la lista de productos
+                else:
+                    messagebox.showwarning("Advertencia", "El ID del producto no existe.")
+        except ValueError:
+            messagebox.showerror("Error", "El ID del producto debe ser un número.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Ocurrió un error: {e}")
+    else:
+        messagebox.showwarning("Advertencia", "Ingresa un ID de producto.")
+        
 
 # Crear la ventana principal
 ventana = Tk()
@@ -335,27 +370,35 @@ notebook.pack(fill='both', expand=True)
 pestana_productos = ttk.Frame(notebook)
 notebook.add(pestana_productos, text="Productos")
 
-Label(pestana_productos, text="ID Producto:").grid(row=0, column=0, padx=10, pady=5)
-entry_id_producto = Entry(pestana_productos, width=30)
+entradas = Frame(pestana_productos)
+entradas.grid(row=0, column=0, columnspan=1, pady=10, sticky="w")
+
+Label(entradas, text="ID Producto:").grid(row=0, column=0, padx=10, pady=5)
+entry_id_producto = Entry(entradas, width=30)
 entry_id_producto.grid(row=0, column=1, padx=10, pady=5)
 
-Label(pestana_productos, text="Nombre:").grid(row=1, column=0, padx=10, pady=5)
-entry_nombre = Entry(pestana_productos, width=30)
+Label(entradas, text="Nombre:").grid(row=1, column=0, padx=10, pady=5)
+entry_nombre = Entry(entradas, width=30)
 entry_nombre.grid(row=1, column=1, padx=10, pady=5)
 
-Label(pestana_productos, text="Descripción:").grid(row=2, column=0, padx=10, pady=5)
-entry_descripcion = Entry(pestana_productos, width=30)
+Label(entradas, text="Descripción:").grid(row=2, column=0, padx=10, pady=5)
+entry_descripcion = Entry(entradas, width=30)
 entry_descripcion.grid(row=2, column=1, padx=10, pady=5)
 
-Label(pestana_productos, text="Stock:").grid(row=3, column=0, padx=10, pady=5)
-entry_stock = Entry(pestana_productos, width=30)
+Label(entradas, text="Stock:").grid(row=3, column=0, padx=10, pady=5)
+entry_stock = Entry(entradas, width=30)
 entry_stock.grid(row=3, column=1, padx=10, pady=5)
 
-Label(pestana_productos, text="Precio:").grid(row=4, column=0, padx=10, pady=5)
-entry_precio = Entry(pestana_productos, width=30)
+Label(entradas, text="Precio:").grid(row=4, column=0, padx=10, pady=5)
+entry_precio = Entry(entradas, width=30)
 entry_precio.grid(row=4, column=1, padx=10, pady=5)
 
-Button(pestana_productos, text="Agregar Producto", command=agregar_producto).grid(row=0, column=3, columnspan=2, pady=5, padx=10, sticky="e")
+marco_botones_productos = Frame(pestana_productos)
+marco_botones_productos.grid(row=0, column=1, columnspan=3, pady=10, sticky="ne")
+
+Button(marco_botones_productos, text="Agregar Producto", command=agregar_producto).grid(row=0, column=0, columnspan=1, pady=5, padx=10)
+
+Button(marco_botones_productos, text="Borrar Producto", command=borrar_producto).grid(row=1, column=0, columnspan=1, pady=5, padx=10)
 
 # Configurar las columnas para que se expandan correctamente
 pestana_productos.grid_columnconfigure(3, weight=1)  # Esto hace que la columna 3 se expanda

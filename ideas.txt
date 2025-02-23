@@ -13,5 +13,9 @@
 13. actualizar precio
 14. extraer ventas/mes
 15. extraer compras/mes
+<<<<<<< HEAD
 16. agregar precio a barra de productos en ventas/compras
 17. estado de Venta, Pedido, Pagado, Entregado.
+=======
+16. agregar precio a barra de productos en ventas/compras *
+>>>>>>> c707873e35f4f6fa99c67c60227e859119208646
